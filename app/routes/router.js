@@ -166,12 +166,8 @@ Balanced.Router.map(function() {
 	});
 
 	// signup related
-	this.route('login', {
-		path: '/login'
-	});
-	this.route('logout', {
-		path: '/logout'
-	});
+	this.route('login');
+	this.route('logout');
 
 	this.route('forgotPassword', {
 		path: '/forgot_password'
@@ -182,12 +178,8 @@ Balanced.Router.map(function() {
 	this.route('resetPassword', {
 		path: '/invite/:token'
 	});
-	this.route('start', {
-		path: '/start'
-	});
-	this.route('claim', {
-		path: '/claim'
-	});
+	this.route('start');
+	this.route('claim');
 	this.route('accountSecurity', {
 		path: '/security'
 	});
