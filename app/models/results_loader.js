@@ -21,23 +21,24 @@ Balanced.TransactionsResultsLoader = Balanced.ResultsLoader.extend({
 	resultsType: Balanced.Transaction,
 	path: "/transactions",
 
-	startTime: function() {
-		console.log(this.get("marketplace.created_at"));
-		return this.get("marketplace.created_at");
-	}.property(),
-
-	endTime: function() {
-		return moment().add('days', 2);
-	}.property(),
-
 	queryStringArguments: function() {
-		return {
+		var attributes = {
 			limit: 50,
 			sort: "created_at,desc",
 			q: "",
-			sort: "created_at,desc",
 			"status[in]": "failed,succeeded,pending",
 			"type[in]": "debit,credit,hold,refund"
 		};
-	}.property(),
+		var startTime = this.get("startTime");
+		var endTime = this.get("endTime");
+
+		if (startTime) {
+			attributes['created_at[>]'] = startTime.toDate().toISOString();
+		}
+
+		if (endTime) {
+			attributes['created_at[<]'] = endTime.toDate().toISOString();
+		}
+		return attributes;
+	}.property("startTime", "endTime"),
 });

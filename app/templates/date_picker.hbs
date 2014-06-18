@@ -1,9 +1,13 @@
 <div class="dropdown borderless datetime-picker">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
     	<i class="icon-calendar"></i>
-  		<span {{bind-attr datetime="view.model.startTime"}} class="min-date date">{{view.model.startTime}}</span>
+  		<span {{bind-attr class=":date"}}>
+        {{view.startTimeLabel}}
+      </span>
   		<span class="sep">–</span>
-  		<span {{bind-attr datespan="view.model.endTime"}} class="max-date date">{{view.model.endTime}}</span>
+      <span {{bind-attr class=":date"}}>
+        {{view.endTimeLabel}}
+      </span>
   		<b class="caret"></b>
     </a>
 </div>

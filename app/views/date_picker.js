@@ -95,9 +95,21 @@ Balanced.DatePickerView = Balanced.View.extend({
 	}
 });
 
+var computedFormattedTime = function(propertyName, labelUndefined) {
+	return function() {
+		var value = this.get(propertyName);
+		return value ?
+			value.format(this.get("format")) :
+			labelUndefined;
+	}.property(propertyName);
+};
+
 Balanced.ResultsLoaderDatePickerView = Balanced.View.extend({
 	templateName: 'date_picker',
 	format: 'MMM D, YYYY, h:mm a',
+
+	startTimeLabel: computedFormattedTime("startTime", "..."),
+	endTimeLabel: computedFormattedTime("endTime", "..."),
 
 	didInsertElement: function() {
 		var self = this;
@@ -132,16 +144,16 @@ Balanced.ResultsLoaderDatePickerView = Balanced.View.extend({
 				parentEl: '.ember-application'
 			}, callback)
 			.on('apply.daterangepicker', function(e, dateRangePicker) {
-				console.log(dateRangePicker)
-				self.chooseDateTime(dateRangePicker.startDate.toDate(), dateRangePicker.endDate.toDate());
+				self.chooseDateTime(dateRangePicker.startDate, dateRangePicker.endDate);
 			});
 	},
 
 	chooseDateTime: function(start, end) {
-		console.log(this, this.get("model"), this.get("modelBinding"));
-		this.get("model").setProperties({
+		var attributes = {
 			startTime: start,
 			endTime: end
-		});
+		};
+		this.setProperties(attributes);
+		this.get("model").setProperties(attributes);
 	}
 });
