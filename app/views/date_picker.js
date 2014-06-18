@@ -15,8 +15,15 @@ Balanced.DatePickerView = Balanced.View.extend({
 
 	// temporary properties to use for selecting time periods, controller
 	// stores the values used for filtering
-	minTime: null,
-	maxTime: null,
+	minTime: function(key, value, previousValue) {
+		if (arguments.length > 1) {
+			this.set('controller.minDate', value);
+		}
+		var minDate = this.get('controller.minDate');
+		return minDate || this.get("controller.marketplace.created_at")
+		return moment(Balanced.currentMarketplace.get('created_at')).toDate() || DEFAULT_MIN_TIME;
+	}.property("controller.minDate"),
+	maxTime: Ember.computed.alias("controller.maxDate"),
 
 	format: 'MMM D, YYYY, h:mm a',
 
@@ -29,11 +36,13 @@ Balanced.DatePickerView = Balanced.View.extend({
 	}.property('minTime', 'format'),
 
 	didInsertElement: function() {
-		this.set('maxTime', (this.get('controller.maxDate') || DEFAULT_MAX_TIME).getTime());
-		this.set('minTime', (this.get('controller.minDate') || moment(Balanced.currentMarketplace.get('created_at')).toDate() || DEFAULT_MIN_TIME).getTime());
-
-		Ember.run.scheduleOnce('afterRender', this, this.bindDatePicker);
-		this._changeDateFilter('');
+		// this.set('maxTime', (this.get('controller.maxDate') || DEFAULT_MAX_TIME).getTime());
+		// this.set('minTime', (this.get('controller.minDate') || moment(Balanced.currentMarketplace.get('created_at')).toDate() || DEFAULT_MIN_TIME).getTime());
+		var self = this;
+		Ember.run.scheduleOnce('afterRender', function() {
+			self.bindDatePicker();
+		});
+		//this._changeDateFilter('');
 
 		this._super();
 	},
@@ -50,27 +59,31 @@ Balanced.DatePickerView = Balanced.View.extend({
 	},
 
 	bindDatePicker: function() {
-		this.$('.datetime-picker').daterangepicker({
-			endDate: moment(this.get('maxTime')),
-			startDate: moment(this.get('minTime')),
+		var attributes = {
+			endDate: moment(this.get('endDate')),
+			startDate: moment(this.get('startDate')),
 			locale: DEFAULT_LOCALE,
-			timePicker: true,
+			timePicker: false,
 			format: 'MMM D, YYYY',
 			minDate: BALANCED_CREATED_AT,
 			maxDate: moment().add('days', 2),
 			parentEl: '.ember-application'
-		}, _.bind(this.chooseDateTime, this)).on('apply.daterangepicker', _.bind(this.applyDateTime, this));
+		};
+
+		this.$('.datetime-picker')
+			.daterangepicker(attributes, _.bind(this.chooseDateTime, this))
+			.on('apply.daterangepicker', _.bind(this.applyDateTime, this));
 	},
 
 	applyDateTime: function(e, dateRangePicker) {
 		this.chooseDateTime(dateRangePicker.startDate.valueOf(), dateRangePicker.endDate.valueOf());
 	},
 
-	chooseDateTime: function(start, end) {
-		this.setProperties({
-			minTime: start.valueOf(),
-			maxTime: end.valueOf()
-		});
+	chooseDateTime: function(start, end, label) {
+		// this.setProperties({
+		// 	minTime: start.valueOf(),
+		// 	maxTime: end.valueOf()
+		// });
 
 		this._changeDateFilter('');
 	},
@@ -79,5 +92,56 @@ Balanced.DatePickerView = Balanced.View.extend({
 		var maxTime = new Date(this.get('maxTime'));
 		var minTime = new Date(this.get('minTime'));
 		this.get('controller').send('changeDateFilter', minTime, maxTime, label);
+	}
+});
+
+Balanced.ResultsLoaderDatePickerView = Balanced.View.extend({
+	templateName: 'date_picker',
+	format: 'MMM D, YYYY, h:mm a',
+
+	didInsertElement: function() {
+		var self = this;
+		Ember.run.scheduleOnce('afterRender', function() {
+			self.bindDatePicker();
+		});
+		this._super();
+	},
+
+	willDestroyElement: function() {
+		var dateRangePicker = this.$('.datetime-picker').data('daterangepicker');
+		if (dateRangePicker) {
+			dateRangePicker.remove();
+		}
+		this._super();
+	},
+
+	bindDatePicker: function() {
+		var self = this;
+		var callback = function(start, end) {
+			self.chooseDateTime(start.toDate(), end.toDate());
+		};
+		this.$('.datetime-picker')
+			.daterangepicker({
+				endDate: moment(this.get('maxTime')),
+				startDate: moment(this.get('minTime')),
+				locale: DEFAULT_LOCALE,
+				timePicker: false,
+				format: 'MMM D, YYYY',
+				minDate: BALANCED_CREATED_AT,
+				maxDate: moment().add('days', 2),
+				parentEl: '.ember-application'
+			}, callback)
+			.on('apply.daterangepicker', function(e, dateRangePicker) {
+				console.log(dateRangePicker)
+				self.chooseDateTime(dateRangePicker.startDate.toDate(), dateRangePicker.endDate.toDate());
+			});
+	},
+
+	chooseDateTime: function(start, end) {
+		console.log(this, this.get("model"), this.get("modelBinding"));
+		this.get("model").setProperties({
+			startTime: start,
+			endTime: end
+		});
 	}
 });

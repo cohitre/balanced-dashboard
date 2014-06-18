@@ -1,6 +1,7 @@
 <nav>
-	{{view Balanced.DatePickerView viewName="dateTimePicker"}}
-
+	ddd {{controller.resultsLoader.endDate}} - {{resultsLoader.endDate}} bbb
+	{{view Balanced.ResultsLoaderDatePickerView modelBinding="controller.resultsLoader"}}
+	ddd-bbb
 	<div>
 	{{#if view.show_download_button}}
 		{{view Balanced.DownloadModalView noURIBinding="controller.noDownloadsUri"}}

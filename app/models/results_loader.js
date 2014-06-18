@@ -21,6 +21,15 @@ Balanced.TransactionsResultsLoader = Balanced.ResultsLoader.extend({
 	resultsType: Balanced.Transaction,
 	path: "/transactions",
 
+	startTime: function() {
+		console.log(this.get("marketplace.created_at"));
+		return this.get("marketplace.created_at");
+	}.property(),
+
+	endTime: function() {
+		return moment().add('days', 2);
+	}.property(),
+
 	queryStringArguments: function() {
 		return {
 			limit: 50,

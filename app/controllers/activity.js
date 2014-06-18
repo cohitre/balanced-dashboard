@@ -73,7 +73,7 @@ Balanced.ActivityController = Balanced.ObjectController.extend(Ember.Evented, Ba
 	}.property('type', 'controllers.marketplace.uri')
 });
 
-Balanced.ActivityTransactionsController = Balanced.Controller.extend({
+Balanced.ActivityTransactionsController = Balanced.Controller.extend(Ember.Evented, {
 	needs: ['marketplace'],
 
 	pageTitle: 'Transactions',
