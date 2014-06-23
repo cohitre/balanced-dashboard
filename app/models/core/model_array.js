@@ -137,6 +137,12 @@ Balanced.ModelArray.reopenClass({
 		modelObjectsArray.set('isLoaded', false);
 		Balanced.Adapter.get(typeClass, uri, function(json) {
 			var deserializedJson = typeClass.serializer.extractCollection(json);
+			if (deserializedJson.items.length > 3) {
+				console.log(deserializedJson.items.map(function(i) {
+					return i.created_at;
+				}));
+			}
+
 			modelObjectsArray._populateModels(deserializedJson);
 		}, function(jqXHR, textStatus, errorThrown) {
 			modelObjectsArray._handleError(jqXHR, textStatus, errorThrown);

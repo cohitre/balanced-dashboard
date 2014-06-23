@@ -73,12 +73,19 @@ Balanced.ActivityController = Balanced.ObjectController.extend(Ember.Evented, Ba
 	}.property('type', 'controllers.marketplace.uri')
 });
 
-Balanced.ActivityTransactionsController = Balanced.ActivityController.extend({
+Balanced.ActivityTransactionsController = Balanced.Controller.extend(Ember.Evented, {
 	needs: ['marketplace'],
-	baseClassSelector: '#transactions',
-	type: 'transaction',
+
 	pageTitle: 'Transactions',
 	noDownloadsUri: true,
+
+	marketplace: Ember.computed.oneWay("controllers.marketplace"),
+	resultsLoader: function() {
+		return Balanced.TransactionsResultsLoader.create(this.getProperties("marketplace"));
+	}.property("marketplace"),
+
+	baseClassSelector: '#transactions',
+	type: 'transaction',
 });
 
 Balanced.ActivityOrdersController = Balanced.ActivityController.extend({

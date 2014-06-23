@@ -1,6 +1,5 @@
 <nav>
-	{{view Balanced.DatePickerView viewName="dateTimePicker"}}
-
+	{{view Balanced.ResultsLoaderDatePickerView modelBinding="controller.resultsLoader"}}
 	<div>
 	{{#if view.show_download_button}}
 		{{view Balanced.DownloadModalView noURIBinding="controller.noDownloadsUri"}}
