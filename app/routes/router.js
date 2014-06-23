@@ -100,12 +100,8 @@ Balanced.Router.map(function() {
 				path: '/'
 			}, function() {
 				this.route('orders');
-				this.route('transactions');
 			});
 
-			this.resource('customers', {
-				path: '/customers/:item_id'
-			});
 			// exists to handle old URIs for accounts, redirects to the customers page
 			this.resource('accounts', {
 				path: '/accounts/:item_id'
@@ -154,6 +150,7 @@ Balanced.Router.map(function() {
 				path: '/account_statements/:item_id'
 			});
 
+			this.route('transactions');
 			makeNestedResource(this, 'customers', 'customer');
 
 			makeNestedResource(this, 'customers', 'customer');

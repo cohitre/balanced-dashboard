@@ -137,7 +137,7 @@ Balanced.ResultsLoaderDatePickerView = Balanced.View.extend({
 				endDate: moment(this.get('maxTime')),
 				startDate: moment(this.get('minTime')),
 				locale: DEFAULT_LOCALE,
-				timePicker: false,
+				timePicker: true,
 				format: 'MMM D, YYYY',
 				minDate: BALANCED_CREATED_AT,
 				maxDate: moment().add('days', 2),
