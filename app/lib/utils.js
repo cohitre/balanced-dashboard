@@ -1,12 +1,11 @@
+require("./url_string_utilities");
+
 var FORMAT_NUMBER_REGEX = /\B(?=(\d{3})+(?!\d))/g,
 	PRETTY_LOG_URL_REGEX = /\/marketplaces\/[^\/]*\/(.+)$/,
 	STRIP_DOMAIN_REGEX = /^.*\/\/[^\/]+/,
 	TO_TITLECASE_REGEX = /\w\S*/g,
 	SPACE_REPLACE_REGEX = /\s/g,
 	UNDERSCORE_REPLACE_REGEX = /_/g,
-	PARAM_HELPER_1_REGEX = /[\[]/,
-	PARAM_HELPER_2_REGEX = /[\]]/,
-	PARAM_URI_DECODE_REGEX = /\+/g,
 	FORMAT_CURRENCY_REGEX = /(\d)(?=(\d{3})+\.)/g,
 	FORMAT_ERROR_REGEX = /-\s/,
 	REMOVE_COMMA_WHITESPACE_REGEX = /,|\s/g,
@@ -14,29 +13,14 @@ var FORMAT_NUMBER_REGEX = /\B(?=(\d{3})+(?!\d))/g,
 	HIDE_BA_NUMBER_REGEX = /([0-9])[\s+\-]([0-9])/g,
 	HIDE_CC_NUMBER_REGEX = /([0-9]*)([0-9]{4})/g;
 
-
 Balanced.Utils = Ember.Namespace.create({
 
 	toDataUri: function(string) {
 		return "data:text/plain;charset=utf-8;base64," + window.btoa(string);
 	},
 
-	queryStringToObject: function(string) {
-		if (string === undefined) {
-			return undefined;
-		}
-
-		var results = {};
-		var pairs = string.split("?")[1].split("&");
-		pairs.forEach(function(str) {
-			var pair = str.split("=").map(function(s) {
-				return window.decodeURIComponent(s);
-			});
-			results[pair[0]] = pair[1];
-		});
-
-		return results;
-	},
+	queryStringToObject: Balanced.UrlStringUtilities.queryStringToObject,
+	objectToQueryString: Balanced.UrlStringUtilities.objectToQueryString,
 
 	stripDomain: function(url) {
 		return url.replace(STRIP_DOMAIN_REGEX, '');
@@ -97,23 +81,17 @@ Balanced.Utils = Ember.Namespace.create({
 	},
 
 	getParamByName: function(uri, name) {
-		name = name.replace(PARAM_HELPER_1_REGEX, "\\\\[").replace(PARAM_HELPER_2_REGEX, "\\\\]");
-		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-			results = regex.exec(uri);
-		return results === null ? "" : decodeURIComponent(results[1].replace(PARAM_URI_DECODE_REGEX, " "));
+		return this.queryStringToObject(uri)[name];
 	},
 
 	/*
 	 * Inserts or updates a single query string parameter
 	 */
 	updateQueryStringParameter: function(uri, key, value) {
-		var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
-		var separator = uri.indexOf("?") > -1 ? "&" : "?";
-		if (uri.match(re)) {
-			return uri.replace(re, "$1" + key + "=" + value + "$2");
-		} else {
-			return uri + separator + key + "=" + value;
-		}
+		var baseUri = uri.split("?")[0];
+		var queryObject = this.queryStringToObject(uri);
+		queryObject[key] = value;
+		return baseUri + "?" + this.objectToQueryString(queryObject);
 	},
 
 	sortDict: function(dict) {
@@ -268,16 +246,9 @@ Balanced.Utils = Ember.Namespace.create({
 		}
 
 		filteringParams = _.extend(filteringParams, _.omit(params, transformedParams));
-
 		filteringParams = Balanced.Utils.sortDict(filteringParams);
-
-		var queryString = $.map(filteringParams, function(v, k) {
-			return encodeURIComponent(k) + '=' + encodeURIComponent(v);
-		}).join('&');
-
-		uri += '?' + queryString;
-
-		return uri;
+		var queryString = Balanced.Utils.objectToQueryString(filteringParams);
+		return uri + '?' + queryString;
 	},
 
 	/*

@@ -17,10 +17,14 @@ test('getParamByName', function(assert) {
 		'/v1/marketplaces?infront=foo&query=123&after=bar'
 	];
 
-	for (var i = 0; i < uris.length; i++) {
-		var result = Balanced.Utils.getParamByName(uris[i], 'query');
+	uris.forEach(function(uri) {
+		var result = Balanced.Utils.getParamByName(uri, 'query');
 		assert.equal(result, '123');
-	}
+	});
+
+	var uri = '/v1/marketplaces?infront=foo&created_at%5B%3E%5D=1%2B3&after=bar';
+	var result = Balanced.Utils.getParamByName(uri, 'created_at[>]');
+	assert.equal(result, '1+3');
 });
 
 test('formatCurrency', function(assert) {
