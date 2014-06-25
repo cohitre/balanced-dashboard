@@ -5,13 +5,14 @@ Balanced.ResultsDropdownFilterView = Balanced.View.extend({
 	actions: {
 		setFilter: function(value) {
 			var model = this.get("model");
-			model.set("typeFilters", value);
+			model.set(this.get("filter"), value);
 		}
 	}
 });
 
 Balanced.TransactionTypesResultsDropdownFilterView = Balanced.ResultsDropdownFilterView.extend({
 	toggleText: "Type",
+	filter: "typeFilters",
 	filters: function() {
 		var filters = [];
 		var addFilter = function(text, value) {
@@ -34,6 +35,7 @@ Balanced.TransactionTypesResultsDropdownFilterView = Balanced.ResultsDropdownFil
 
 Balanced.TransactionStatusResultsDropdownFilterView = Balanced.ResultsDropdownFilterView.extend({
 	toggleText: "Status",
+	filter: "statusFilters",
 	filters: function() {
 		var filters = [];
 		var addFilter = function(text, value) {
