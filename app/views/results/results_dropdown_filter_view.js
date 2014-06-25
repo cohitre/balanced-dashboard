@@ -5,6 +5,7 @@ Balanced.ResultsDropdownFilterView = Balanced.View.extend({
 	actions: {
 		setFilter: function(value) {
 			var model = this.get("model");
+			console.log
 			model.set(this.get("filter"), value);
 		}
 	}
@@ -33,6 +34,26 @@ Balanced.TransactionTypesResultsDropdownFilterView = Balanced.ResultsDropdownFil
 	}.property(),
 });
 
+Balanced.FundingInstrumentTypesResultsDropdownFilterView = Balanced.ResultsDropdownFilterView.extend({
+	toggleText: "Payment method",
+	filter: "typeFilters",
+	filters: function() {
+		var filters = [];
+		var addFilter = function(text, value) {
+			filters.push({
+				value: value.split(","),
+				text: text
+			});
+		};
+
+		addFilter("All", "card,bank_account");
+		addFilter("Cards", "card");
+		addFilter("Bank accounts", "bank_account");
+
+		return filters;
+	}.property(),
+});
+
 Balanced.TransactionStatusResultsDropdownFilterView = Balanced.ResultsDropdownFilterView.extend({
 	toggleText: "Status",
 	filter: "statusFilters",
@@ -49,6 +70,59 @@ Balanced.TransactionStatusResultsDropdownFilterView = Balanced.ResultsDropdownFi
 		addFilter("Pending", "pending");
 		addFilter("Succeeded", "succeeded");
 		addFilter("Failed", "failed");
+
+		return filters;
+	}.property(),
+});
+
+Balanced.LogsEndpointResultsDropdownFilterView = Balanced.ResultsDropdownFilterView.extend({
+	toggleText: "Endpoint",
+	filter: "endpointFilters",
+	filters: function() {
+		var filters = [];
+		var addFilter = function(text, value) {
+			filters.push({
+				value: value.split(","),
+				text: text
+			});
+		};
+
+		filters.push({
+			value: undefined,
+			text: "All"
+		});
+		addFilter("Debits", "debits");
+		addFilter("Credits", "credits");
+		addFilter("Refunds", "refunds");
+		addFilter("Holds", "holds");
+		addFilter("Customers", "customers");
+		addFilter("Accounts", "accounts");
+		addFilter("Bank accounts", "bank_accounts");
+		addFilter("Cards", "Cards");
+		addFilter("Verifications", "verifications");
+
+		return filters;
+	}.property(),
+});
+
+Balanced.LogsStatusResultsDropdownFilterView = Balanced.ResultsDropdownFilterView.extend({
+	toggleText: "Status",
+	filter: "statusRollupFilters",
+	filters: function() {
+		var filters = [];
+		var addFilter = function(text, value) {
+			filters.push({
+				value: value.split(","),
+				text: text
+			});
+		};
+
+		filters.push({
+			value: undefined,
+			text: "All"
+		});
+		addFilter("Succeeded", "2xx");
+		addFilter("Failed", "3xx,4xx,5xx");
 
 		return filters;
 	}.property(),

@@ -42,6 +42,8 @@ Balanced.ResultsLoader = Ember.Object.extend({
 		setFilterKey("type", this.get("typeFilters"));
 		setFilterKey("status", this.get("statusFilters"));
 		setFilterKey("method", this.get("methodFilters"));
+		setFilterKey("endpoint", this.get("endpointFilters"));
+		setFilterKey("status_rollup", this.get("statusRollupFilters"));
 
 		var startTime = this.get("startTime");
 		var endTime = this.get("endTime");
@@ -59,7 +61,7 @@ Balanced.ResultsLoader = Ember.Object.extend({
 		}
 
 		return attributes;
-	}.property("sort", "startTime", "endTime", "typeFilters", "statusFilters", "limit")
+	}.property("sort", "startTime", "endTime", "typeFilters", "statusFilters", "endpointFilters", "statusRollupFilters", "limit")
 });
 
 Balanced.TransactionsResultsLoader = Balanced.ResultsLoader.extend({

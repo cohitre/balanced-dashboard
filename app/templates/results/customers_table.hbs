@@ -6,22 +6,7 @@
 	</tr>
 </thead>
 
-{{#if view.customers.hasNextPage}}
-	<tfoot>
-		<tr>
-			<td colspan="3" class="load-more-results">
-				{{#if view.customers.loadingNextPage}}
-					<div class="loader-container">
-						<span class="loader loading"></span>
-					</div>
-				{{else}}
-					<a class="btn sm secondary" {{action "loadMore" view.customers}}>Load more</a>
-				{{/if}}
-			</td>
-		</tr>
-	</tfoot>
-{{/if}}
-
+{{view Balanced.ResultsLoadMoreView results=view.customers columns=3}}
 <tbody>
 	{{#each customer in view.customers}}
 		<tr>
