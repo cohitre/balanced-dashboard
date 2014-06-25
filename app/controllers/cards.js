@@ -1,18 +1,12 @@
-Balanced.CardsController = Balanced.ObjectController.extend(
-	Balanced.ActionEvented('openDebitFundingInstrumentModal', 'openCreditFundingInstrumentModal', 'openHoldCardModal'),
-	Balanced.ResultsTable,
-	Balanced.TransactionsTable, {
-		needs: ['marketplace'],
+var Events = Balanced.ActionEvented('openDebitFundingInstrumentModal', 'openCreditFundingInstrumentModal', 'openHoldCardModal');
 
-		sortField: 'created_at',
-		sortOrder: 'desc',
+Balanced.CardsController = Balanced.ObjectController.extend(Events, {
+	needs: ['marketplace'],
 
-		baseClassSelector: "#card",
-
-		results_base_uri: function() {
-			return this.get('type') === 'dispute' ?
-				'/disputes' :
-				this.get("content.transactions_uri");
-		}.property("type", "content.transactions_uri")
-	}
-);
+	transactionsResultsLoader: function() {
+		return Balanced.TransactionsResultsLoader.create({
+			marketplace: this.get("marketplace"),
+			path: this.get("model.transactions_uri")
+		});
+	}.property("model"),
+});

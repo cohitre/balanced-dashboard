@@ -15,7 +15,7 @@ Balanced.Customer = Balanced.Model.extend({
 	disputes: Balanced.Model.hasMany('disputes', 'Balanced.Dispute'),
 
 	uri: '/customers',
-	route_name: 'customer',
+	route_name: 'marketplace.customer',
 
 	has_bank_account: Ember.computed.and('bank_accounts.isLoaded', 'bank_accounts.length'),
 

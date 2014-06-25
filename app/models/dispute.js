@@ -33,7 +33,7 @@ Balanced.Dispute = Balanced.Model.extend({
 	is_pending: Computed.isStatus('pending'),
 
 	type_name: 'Dispute',
-	route_name: 'dispute',
+	route_name: 'marketplace.dispute',
 	events_uri: Balanced.computed.concat('uri', '/events'),
 	uri: '/disputes'
 });

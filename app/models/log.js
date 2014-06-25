@@ -1,6 +1,6 @@
 Balanced.Log = Balanced.Model.extend({
 	uri: '/logs',
-	route_name: 'log',
+	route_name: 'marketplace.log',
 
 	page_title: Balanced.computed.fmt('message.request.method', 'short_url', '%@ %@'),
 	short_url: Balanced.computed.transform('message.request.url', Balanced.Utils.stripDomain),

@@ -93,44 +93,41 @@ Balanced.TransactionsFiltersHeaderView = Balanced.View.extend({
 
 Balanced.ResultsSortableColumnHeaderView = Balanced.View.extend({
 	tagName: 'div',
-	classNameBindings: 'sortClass',
+	classNameBindings: [':sortable', 'sortClass'],
+	resultsLoader: Ember.computed.oneWay("controller.resultsLoader"),
 
 	sortClass: function() {
+		var sortField = this.get('field');
+		var currentSortField = this.get("resultsLoader.sortField");
+		var currentSortDirection = this.get("resultsLoader.sortDirection");
+
 		var SORTS = {
 			asc: 'ascending',
 			desc: 'descending'
 		};
 
-		var sortField = this.get('controller.sortField');
-		var sortOrder = this.get('controller.sortOrder');
-		if (sortField !== this.get('field')) {
+		if (currentSortField !== sortField) {
 			return 'unsorted';
 		} else {
-			return SORTS[sortOrder] || 'unsorted';
+			return SORTS[currentSortDirection] || 'unsorted';
 		}
-	}.property('controller.sortField', 'controller.sortOrder'),
+	}.property('field', 'resultsLoader.sortField', 'resultsLoader.sortDirection'),
 
 	click: function(e) {
-		var sortField = this.get('controller.sortField');
-		var sortOrder = this.get('controller.sortOrder');
-		var allowSortByNone = this.get('controller.allowSortByNone');
-		var nextSortOrder = 'desc';
+		var sortField = this.get('field');
+		var currentSortField = this.get("resultsLoader.sortField");
+		var currentSortDirection = this.get("resultsLoader.sortDirection");
+		var sortProperties = {
+			sortField: sortField,
+		};
 
-		if (sortField === this.get('field')) {
-			switch (sortOrder) {
-				case 'asc':
-					nextSortOrder = 'desc';
-					break;
-				case 'desc':
-					nextSortOrder = 'asc';
-					if (allowSortByNone) {
-						nextSortOrder = 'none';
-					}
-					break;
-			}
+		if (currentSortField === sortField && currentSortDirection === "desc") {
+			sortProperties.sortDirection = "asc";
+		} else {
+			sortProperties.sortDirection = "desc";
 		}
 
-		this.get('controller').send('changeSortOrder', this.get('field'), nextSortOrder);
+		this.get("resultsLoader").setProperties(sortProperties);
 	}
 });
 

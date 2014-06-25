@@ -93,7 +93,7 @@
 			{{view Balanced.TransactionsFiltersHeaderView}}
 
 			<div class="items-wrapper">
-				{{view Balanced.TransactionsResultsView transactionsBinding="results"}}
+				{{view Balanced.TransactionsResultsView transactions=transactionsResultsLoader.results}}
 			</div>
 		</div>
 	</section>

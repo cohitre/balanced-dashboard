@@ -45,63 +45,62 @@ Balanced.Router = Ember.Router.extend({
 	}
 });
 
-function makeNestedResource(that, plural, singular) {
-	// Instead of a nested resource, use 2 routes
-	// since elements don't share the same route/controller/view
-	// See http://discuss.emberjs.com/t/nested-resource-rendering-into-main-outlet-and-linkto-issue/1791
-	that.route(plural, {
-		path: '/' + plural
+var objectToRoutes = function(routeMapper, object) {
+	_.each(object, function(routePath, routeName) {
+		routeMapper.route(routeName, {
+			path: routePath
+		});
 	});
-
-	that.resource(singular, {
-		path: '/' + plural + '/:item_id'
-	});
-}
+};
 
 Balanced.Router.map(function() {
+	// Signup and accounts related
+	objectToRoutes(this, {
+		login: "/login",
+		logout: "/logout",
+		forgotPassword: "/forgot_password",
+		resetPassword2: '/password/:token',
+		resetPassword: '/invite/:token',
+		start: "/start",
+		claim: "/claim",
+		accountSecurity: "/security",
+	});
 
-	this.resource('marketplaces', {
-		path: '/marketplaces'
-	}, function() {
-
-		this.route('apply', {
-			path: '/apply'
-		});
+	this.resource('marketplaces', function() {
+		this.route('apply');
 
 		this.resource('marketplace', {
 			path: '/:marketplace_id'
 		}, function() {
-			this.route('settings');
-			this.route('add_customer');
-			this.route('initial_deposit');
-			this.route('import_payouts');
+			objectToRoutes(this, {
+				settings: "/settings",
+				add_customer: "/add_customer",
+				initial_deposit: "/initial_deposit",
+				import_payouts: "/import_payouts",
 
-			// exists to handle old URIs
-			this.route("redirect_activity_transactions", {
-				path: '/activity/transactions'
-			});
-			this.route("redirect_activity_orders", {
-				path: '/activity/orders'
-			});
-			this.route("redirect_activity_customers", {
-				path: 'activity/customers'
-			});
-			this.route("redirect_activity_funding_instruments", {
-				path: 'activity/funding_instruments'
-			});
-			this.route("redirect_activity_disputes", {
-				path: 'activity/disputes'
-			});
-			this.route("redirect_invoices", {
-				path: 'invoices'
+				transactions: "/transactions",
+				customers: "/customers",
+				customer: "/customer/:item_id",
+
+				disputes: "/disputes",
+				dispute: "/dispute/:item_id",
+
+				funding_instruments: "/payment_methods",
+
+				logs: "/logs",
+				log: "/log/:item_id",
+
+				redirect_activity_transaction: '/activity/transactions',
+				redirect_activity_orders: '/activity/orders',
+				redirect_activity_customers: '/activity/customers',
+				redirect_activity_funding_instruments: '/activity/funding_instruments',
+				redirect_activity_disputes: '/activity/disputes',
+				redirect_invoices: 'invoices'
 			});
 
 			this.resource('activity', {
 				path: '/'
-			}, function() {
-				this.route('orders');
-			});
-
+			}, function() {});
 			// exists to handle old URIs for accounts, redirects to the customers page
 			this.resource('accounts', {
 				path: '/accounts/:item_id'
@@ -134,12 +133,10 @@ Balanced.Router.map(function() {
 				path: '/events/:item_id'
 			});
 
+			this.route('orders');
+			this.route('disputes');
 			this.resource('orders', {
 				path: '/orders/:item_id'
-			});
-
-			this.route('funding_instruments', {
-				path: '/payment_methods'
 			});
 
 			this.route('invoices', {
@@ -149,44 +146,7 @@ Balanced.Router.map(function() {
 			this.resource('invoice', {
 				path: '/account_statements/:item_id'
 			});
-
-			this.route('transactions');
-			makeNestedResource(this, 'customers', 'customer');
-
-			makeNestedResource(this, 'customers', 'customer');
-
-			makeNestedResource(this, 'disputes', 'dispute');
-
-			makeNestedResource(this, 'logs', 'log');
 		});
-
-	});
-
-	// signup related
-	this.route('login', {
-		path: '/login'
-	});
-	this.route('logout', {
-		path: '/logout'
-	});
-
-	this.route('forgotPassword', {
-		path: '/forgot_password'
-	});
-	this.route('resetPassword', {
-		path: '/password/:token'
-	});
-	this.route('resetPassword', {
-		path: '/invite/:token'
-	});
-	this.route('start', {
-		path: '/start'
-	});
-	this.route('claim', {
-		path: '/claim'
-	});
-	this.route('accountSecurity', {
-		path: '/security'
 	});
 
 	this.route('invalid', {
