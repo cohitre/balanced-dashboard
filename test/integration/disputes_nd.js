@@ -1,4 +1,4 @@
-module('Disputes (non-deterministic)', {
+module('Disputes (nd)', {
 	setup: function() {
 		Testing.setupMarketplace();
 		Testing.createDisputes();

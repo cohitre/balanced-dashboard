@@ -45,6 +45,7 @@ Balanced.Rev1Serializer = Ember.Object.extend({
 		var populateFunc = function(val) {
 			collection.push(self._populateObject(val, typeName, rootJson));
 		};
+
 		for (var typeName in rootJson) {
 			var vals = rootJson[typeName];
 			if ($.isArray(vals)) {
@@ -52,13 +53,11 @@ Balanced.Rev1Serializer = Ember.Object.extend({
 			}
 		}
 
-		var linked = rootJson.linked ? rootJson.linked : null;
 		var nextUri = rootJson.meta ? rootJson.meta.next : null;
 		var counts = rootJson.meta ? rootJson.meta.counts : null;
 
 		return {
 			items: collection,
-			linked: linked,
 			next_uri: nextUri,
 			counts: counts
 		};

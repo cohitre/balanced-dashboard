@@ -4,8 +4,6 @@ Ember.Handlebars.registerBoundHelper('formatCurrency', Balanced.Utils.formatCurr
 
 Ember.Handlebars.registerBoundHelper('formatNumber', Balanced.Utils.formatNumber);
 
-Ember.Handlebars.registerBoundHelper('formatFileSize', Balanced.Utils.formatFileSize);
-
 Ember.Handlebars.registerBoundHelper('formatError', Balanced.Utils.formatError);
 
 Ember.Handlebars.registerBoundHelper('capitalize', Balanced.Utils.capitalize);

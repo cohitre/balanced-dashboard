@@ -9,9 +9,6 @@ Balanced.ModalBaseView = Ember.View.extend({
 		}
 	}.property("element"),
 
-	reposition: function() {
-		$(window).resize();
-	},
 	open: function(container) {
 		var self = this;
 

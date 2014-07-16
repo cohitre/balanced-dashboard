@@ -1,4 +1,4 @@
-module('Events (non-deterministic)', {
+module('Events', {
 	setup: function() {
 		Testing.setupMarketplace();
 		Testing.createDebit();
