@@ -1,6 +1,7 @@
 Balanced.CardsController = Balanced.ObjectController.extend(
 	Balanced.ActionEvented('openDebitFundingInstrumentModal', 'openCreditFundingInstrumentModal', 'openHoldCardModal'),
-	Balanced.ResultsTable, {
+	Balanced.ResultsTable,
+	Balanced.TransactionsTable, {
 		needs: ['marketplace'],
 
 		sortField: 'created_at',

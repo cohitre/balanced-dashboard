@@ -2,7 +2,8 @@ Balanced.BankAccountsController = Balanced.ObjectController.extend(
 	Balanced.ActionEvented('openDebitFundingInstrumentModal',
 		'openCreditFundingInstrumentModal', 'openVerifyBankAccountModal',
 		'openConfirmVerificationModal'),
-	Balanced.ResultsTable, {
+	Balanced.ResultsTable,
+	Balanced.TransactionsTable, {
 		needs: ['marketplace'],
 
 		sortField: 'created_at',

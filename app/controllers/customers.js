@@ -11,7 +11,8 @@ Balanced.MarketplaceCustomersController = Balanced.ObjectController.extend(Ember
 
 Balanced.CustomerController = Balanced.ObjectController.extend(
 	Balanced.ActionEvented('openDeleteBankAccountModal', 'openDeleteCardModal'),
-	Balanced.ResultsTable, {
+	Balanced.ResultsTable,
+	Balanced.TransactionsTable, {
 		needs: ['marketplace'],
 
 		sortField: 'created_at',

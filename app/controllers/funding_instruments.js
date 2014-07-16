@@ -8,10 +8,5 @@ Balanced.MarketplaceFundingInstrumentsController = Balanced.ObjectController.ext
 	baseClassSelector: "#funding-instruments",
 	noDownloadsUri: true,
 
-	type: 'funding_instrument',
-	actions: {
-		changePaymentMethodFilter: function(type) {
-			this.set('type', type);
-		}
-	}
+	type: 'funding_instrument'
 });

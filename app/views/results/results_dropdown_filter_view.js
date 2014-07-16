@@ -1,39 +1,20 @@
 Balanced.ResultsDropdownFilterView = Balanced.View.extend({
 	templateName: "results/results_dropdown_filter",
 	classNameBindings: [":dropdown", ":filter"],
-	isSelected: false,
-
-	toggleSelected: function(filterLink) {
-		var filters = this.get("filters");
-
-		filters.map(function(filter) {
-			filter.set("isSelected", false);
-		});
-
-		filterLink.set("isSelected", true);
-
-		if (filterLink.get('text') === "All") {
-			this.set("isSelected", false);
-		} else {
-			this.set("isSelected", true);
-		}
-	},
 
 	actions: {
-		setFilter: function(filterLink) {
+		setFilter: function(value) {
 			var model = this.get("model");
-			model.set(this.get("filter"), filterLink.value);
-			this.toggleSelected(filterLink);
+			model.set(this.get("filter"), value);
 		}
 	}
 });
 
-var defineFilter = function(text, value, isSelected) {
-	return Ember.Object.create({
+var defineFilter = function(text, value) {
+	return {
 		value: value,
-		text: text,
-		isSelected: isSelected
-	});
+		text: text
+	};
 };
 
 Balanced.TransactionsTypeResultsDropdownFilterView = Balanced.ResultsDropdownFilterView.extend({
@@ -123,16 +104,15 @@ Balanced.LogsEndpointResultsDropdownFilterView = Balanced.ResultsDropdownFilterV
 	filter: "endpointFilters",
 	filters: function() {
 		return [
-			defineFilter("All", undefined, true),
+			defineFilter("All", undefined),
+			defineFilter("Debits", ["debits"]),
+			defineFilter("Credits", ["credits"]),
+			defineFilter("Refunds", ["refunds"]),
+			defineFilter("Holds", ["holds"]),
+			defineFilter("Customers", ["customers"]),
 			defineFilter("Accounts", ["accounts"]),
 			defineFilter("Bank accounts", ["bank_accounts"]),
-			defineFilter("Cards", ["cards"]),
-			defineFilter("Credits", ["credits"]),
-			defineFilter("Customers", ["customers"]),
-			defineFilter("Debits", ["debits"]),
-			defineFilter("Holds", ["holds"]),
-			defineFilter("Refunds", ["refunds"]),
-			defineFilter("Reversals", ["reversals"]),
+			defineFilter("Cards", ["Cards"]),
 			defineFilter("Verifications", ["verifications"])
 		];
 	}.property(),
@@ -143,7 +123,7 @@ Balanced.LogsStatusResultsDropdownFilterView = Balanced.ResultsDropdownFilterVie
 	filter: "statusRollupFilters",
 	filters: function() {
 		return [
-			defineFilter("All", undefined, true),
+			defineFilter("All", undefined),
 			defineFilter("Succeeded", ["2xx"]),
 			defineFilter("Failed", ["3xx", "4xx", "5xx"])
 		];
