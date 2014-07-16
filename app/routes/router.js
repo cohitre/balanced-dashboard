@@ -76,6 +76,10 @@ Balanced.Router.map(function() {
 			this.route('initial_deposit');
 			this.route('import_payouts');
 
+			this.route("bank_account_new", {
+				path: "/bank_account/new"
+			});
+
 			// exists to handle old URIs
 			this.route("redirect_activity_transactions", {
 				path: '/activity/transactions'
