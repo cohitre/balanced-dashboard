@@ -1,5 +1,5 @@
 <h1>Make an initial deposit</h1>
-<form {{action "save" on="submit"}}>
+<form {{action "save" model on="submit"}}>
 		{{view Balanced.FormValidationErrorsView model=model}}
 		{{view Balanced.SelectFormFieldView
 			content=initialAmounts
@@ -19,14 +19,27 @@
 			field="cvv"
 		}}
 
-					{{view Ember.Select
-						contentBinding="expirationMonths"
-						valueBinding="transactionModel.expiration_month"
-						name="expiration_month"
-						viewName="expirationMonth"
-						class="span2"
-					}}
-					{{view Ember.Select contentBinding="expirationYears" valueBinding="transactionModel.expiration_year" name="expiration_year" class="span2"}}
+		{{view Balanced.TextFormFieldView
+			labelText="U. S. postal code"
+			model=model
+			field="postal_code"
+		}}
+
+		{{#view Balanced.BaseFormFieldView
+			labelText="Card's expiration date"
+			model=model
+			field="expiration_date"
+		}}
+			{{view Ember.Select
+				content=creditCardYears
+				viewName="inputElement"
+				value=model.expiration_year
+				class="span2"}}
+			{{view Ember.Select
+				content=creditCardMonths
+				value=model.expiration_month
+				class="span2"}}
+		{{/view}}
 		<hr>
 		<div class="pull-right">
 			<button type="submit">Submit</button>

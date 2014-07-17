@@ -1,19 +1,44 @@
 require("./transaction_factory");
 
+var handleResponse = function(model, errorsList) {
+	console.log(errorsList);
+	var validationErrors = model.get("validationErrors");
+	validationErrors.clear();
+
+	if (Ember.isArray(errorsList)) {
+		_.each(errorsList, function(error) {
+			validationErrors.add("", "serverError", null, error.description);
+		});
+	} else {
+		_.each(errorsList, function(error, attribute) {
+			validationErrors.add(attribute, "serverError", null, error);
+		});
+	}
+};
+
 var ValidationHelpers = Balanced.ValidationHelpers;
 
 Balanced.CardDebitBaseTransactionFactory = Balanced.TransactionFactory.extend({
 	save: function() {
+		var deferred = Ember.RSVP.defer();
 		var self = this;
 		var card = Balanced.Card.create(this.getDestinationAttributes());
-		return card.tokenizeAndCreate().then(function(card) {
-			var debitAttributes = _.extend(self.getDebitAttributes(), {
-				uri: card.get('debits_uri'),
-				source_uri: card.get('uri')
+		card
+			.tokenizeAndCreate()
+			.then(function(card) {
+				var debitAttributes = _.extend(self.getDebitAttributes(), {
+					uri: card.get('debits_uri'),
+					source_uri: card.get('uri')
+				});
+				return Balanced.Debit.create(debitAttributes).save();
+			})
+			.then(function(debit) {
+				deferred.resolve(debit);
+			}, function(errors) {
+				handleResponse(self, errors);
+				deferred.reject();
 			});
-
-			return Balanced.Debit.create(debitAttributes).save();
-		});
+		return deferred.promise
 	}
 });
 
