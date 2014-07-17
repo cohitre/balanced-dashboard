@@ -1,0 +1,34 @@
+<h1>Make an initial deposit</h1>
+<form {{action "save" on="submit"}}>
+		{{view Balanced.FormValidationErrorsView model=model}}
+		{{view Balanced.SelectFormFieldView
+			content=initialAmounts
+			labelText="How much do you want to add to your balanced?"
+			model=model
+			field="dollar_amount"}}
+
+		{{view Balanced.TextFormFieldView
+			labelText="Credit card number"
+			model=model
+			field="number"
+		}}
+
+		{{view Balanced.TextFormFieldView
+			labelText="Security code"
+			model=model
+			field="cvv"
+		}}
+
+					{{view Ember.Select
+						contentBinding="expirationMonths"
+						valueBinding="transactionModel.expiration_month"
+						name="expiration_month"
+						viewName="expirationMonth"
+						class="span2"
+					}}
+					{{view Ember.Select contentBinding="expirationYears" valueBinding="transactionModel.expiration_year" name="expiration_year" class="span2"}}
+		<hr>
+		<div class="pull-right">
+			<button type="submit">Submit</button>
+		</div>
+</form>
