@@ -4,7 +4,7 @@ Balanced.MarketplaceDepositNewController = Balanced.Controller.extend({
 		return _.times(15, function(i) {
 			var year = startYear + i;
 			return year;
-		})
+		});
 	}.property(),
 	creditCardMonths: Balanced.TIME.MONTHS,
 	initialAmounts: function() {

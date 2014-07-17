@@ -1,7 +1,6 @@
 require("./transaction_factory");
 
 var handleResponse = function(model, errorsList) {
-	console.log(errorsList);
 	var validationErrors = model.get("validationErrors");
 	validationErrors.clear();
 
@@ -38,7 +37,7 @@ Balanced.CardDebitBaseTransactionFactory = Balanced.TransactionFactory.extend({
 				handleResponse(self, errors);
 				deferred.reject();
 			});
-		return deferred.promise
+		return deferred.promise;
 	}
 });
 
