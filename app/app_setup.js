@@ -44,12 +44,18 @@ window.setupBalanced = function(divSelector) {
 		},
 
 		sectionPlugins: {},
-		registerSectionView: function(section, viewKlass) {
+		registerSectionView: function(section, initializingMethod) {
 			var plugins = this.getSectionViews(section);
-			plugins.push(viewKlass);
+			plugins.push(initializingMethod);
+		},
+		registerSectionViewClass: function(section, viewKlass) {
+			var self = this;
+			this.registerSectionView(section, function() {
+				viewKlass.create();
+			});
 		},
 
-		getSectionViews: function(section) {
+		getSectionViews: function(section, controller) {
 			this.sectionPlugins[section] = this.sectionPlugins[section] || [];
 			return this.sectionPlugins[section];
 		},
@@ -87,13 +93,22 @@ window.setupBalanced = function(divSelector) {
 		finally(function() {
 			Balanced.advanceReadiness();
 
-			Balanced.registerSectionView("customer/details", Balanced.CustomerSummarySectionView);
-			Balanced.registerSectionView("customer/details", Balanced.CustomerTitledKeyValuesSectionView);
-			Balanced.registerSectionView("customer/details", Balanced.MetaView);
 
-			Balanced.registerSectionView("order/details", Balanced.OrderSummarySectionView);
-			Balanced.registerSectionView("order/details", Balanced.OrderTitledKeyValuesSectionView);
-			Balanced.registerSectionView("order/details", Balanced.MetaView);
+			var modelKlassSection = function(sectionName, klass) {
+				Balanced.registerSectionView(sectionName, function(controller) {
+					return klass.create({
+						modelBinding: "controller.model"
+					});
+				});
+			};
+
+			modelKlassSection("customer/details", Balanced.CustomerSummarySectionView);
+			modelKlassSection("customer/details", Balanced.CustomerTitledKeyValuesSectionView);
+			modelKlassSection("customer/details", Balanced.MetaView);
+
+			modelKlassSection("order/details", Balanced.OrderSummarySectionView);
+			modelKlassSection("order/details", Balanced.OrderTitledKeyValuesSectionView);
+			modelKlassSection("order/details", Balanced.MetaView);
 		});
 
 	}

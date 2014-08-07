@@ -1,14 +1,26 @@
-Balanced.RegisteredSectionContainerView = Ember.View.extend({
+Balanced.RegisteredSectionContainerView = Ember.ContainerView.extend({
 	templateName: "registered_section_container",
-	wrapper: function() {
-		var childViews = this.get("klasses").map(function(klass) {
-			return klass.create({
-				model: self.get("model")
-			});
-		});
-	}.property("klasses", "model"),
 
-	klasses: function() {
+	didInsertElement: function() {
+		this.populateChildren();
+	},
+
+	populateChildren: function() {
+		var self = this;
+		this.clear();
+		this.get("wrapper").forEach(function(view) {
+			self.pushObject(view);
+		});
+	}.observes("wrapper"),
+
+	wrapper: function() {
+		var self = this;
+		return this.get("sectionViews").map(function(callback) {
+			return callback(self.get("controller"));
+		});
+	}.property("sectionViews", "controller"),
+
+	sectionViews: function() {
 		var sectionName = this.get("sectionName");
 		return Balanced.getSectionViews(sectionName);
 	}.property("sectionName"),
