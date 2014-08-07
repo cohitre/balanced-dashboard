@@ -43,6 +43,17 @@ window.setupBalanced = function(divSelector) {
 			changeDate: 'changeDate'
 		},
 
+		sectionPlugins: {},
+		registerSectionView: function(section, viewKlass) {
+			var plugins = this.getSectionViews(section);
+			plugins.push(viewKlass);
+		},
+
+		getSectionViews: function(section) {
+			this.sectionPlugins[section] = this.sectionPlugins[section] || [];
+			return this.sectionPlugins[section];
+		},
+
 		ready: function() {
 			$('#balanced-loading').remove();
 		}
@@ -75,6 +86,10 @@ window.setupBalanced = function(divSelector) {
 			.
 		finally(function() {
 			Balanced.advanceReadiness();
+
+			Balanced.registerSectionView("customer/details", Balanced.CustomerSummarySectionView);
+			Balanced.registerSectionView("customer/details", Balanced.CustomerTitledKeyValuesSectionView);
+			Balanced.registerSectionView("customer/details", Balanced.MetaView);
 		});
 
 	}
