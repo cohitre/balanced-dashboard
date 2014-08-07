@@ -7,9 +7,9 @@
 
 {{#view Balanced.BodyPanelView}}
 	{{#view Balanced.SidePanelView model=model}}
-		{{view Balanced.OrderSummarySectionView model=model}}
-		{{view Balanced.OrderTitledKeyValuesSectionView model=model}}
-		{{view Balanced.MetaView type=model}}
+		{{#each sectionView in detailsSectionViews}}
+			{{view sectionView model=model}}
+		{{/each}}
 	{{/view}}
 
 	{{#view Balanced.MainPanelView}}

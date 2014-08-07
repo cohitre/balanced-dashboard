@@ -90,6 +90,10 @@ window.setupBalanced = function(divSelector) {
 			Balanced.registerSectionView("customer/details", Balanced.CustomerSummarySectionView);
 			Balanced.registerSectionView("customer/details", Balanced.CustomerTitledKeyValuesSectionView);
 			Balanced.registerSectionView("customer/details", Balanced.MetaView);
+
+			Balanced.registerSectionView("order/details", Balanced.OrderSummarySectionView);
+			Balanced.registerSectionView("order/details", Balanced.OrderTitledKeyValuesSectionView);
+			Balanced.registerSectionView("order/details", Balanced.MetaView);
 		});
 
 	}

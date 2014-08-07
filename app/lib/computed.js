@@ -3,6 +3,12 @@ var get = Ember.get,
 a_slice = Array.prototype.slice;
 
 Balanced.computed = Ember.Namespace.create({
+	registeredSectionViews: function(sectionName) {
+		return Ember.computed(function() {
+			return Balanced.getSectionViews(sectionName);
+		}).property("model");
+	},
+
 	sum: function(dependentKey, itemKey) {
 		// FIXME - should be wrapped in Ember.arrayComputed?
 		return Ember.computed(function() {
