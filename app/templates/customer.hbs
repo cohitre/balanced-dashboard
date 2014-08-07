@@ -7,9 +7,7 @@
 
 {{#view Balanced.BodyPanelView}}
 	{{#view Balanced.SidePanelView model=model}}
-		{{#each sectionView in detailsSectionViews}}
-			{{view sectionView model=model}}
-		{{/each}}
+		{{view Balanced.RegisteredSectionContainerView sectionName="customer/details"}}
 	{{/view}}
 	{{#view Balanced.MainPanelView}}
 		<h3>Payments</h3>

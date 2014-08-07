@@ -1,8 +1,6 @@
 Balanced.CustomerController = Balanced.ObjectController.extend({
 	needs: ['marketplace'],
 
-	detailsSectionViews: Balanced.computed.registeredSectionViews("customer/details"),
-
 	actions: {
 		changeDateFilter: function(startTime, endTime) {
 			this.get("transactionsResultsLoader").setProperties({

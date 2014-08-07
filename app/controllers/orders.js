@@ -7,8 +7,6 @@ var resultsLoaderProperty = function(methodName) {
 Balanced.OrdersController = Balanced.ObjectController.extend({
 	needs: ['marketplace'],
 
-	detailsSectionViews: Balanced.computed.registeredSectionViews("order/details"),
-
 	debitsResultsLoader: resultsLoaderProperty("getDebitsResultsLoader"),
 	creditsResultsLoader: resultsLoaderProperty("getCreditsResultsLoader"),
 	reversalsResultsLoader: resultsLoaderProperty("getReversalsResultsLoader"),

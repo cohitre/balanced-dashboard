@@ -7,9 +7,7 @@
 
 {{#view Balanced.BodyPanelView}}
 	{{#view Balanced.SidePanelView model=model}}
-		{{#each sectionView in detailsSectionViews}}
-			{{view sectionView model=model}}
-		{{/each}}
+		{{view Balanced.RegisteredSectionContainerView sectionName="order/details"}}
 	{{/view}}
 
 	{{#view Balanced.MainPanelView}}
