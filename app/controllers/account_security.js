@@ -1,5 +1,5 @@
 Balanced.AccountSecurityController = Balanced.ObjectController.extend(Ember.Evented, {
-	needs: ['marketplaces', 'marketplace', 'application'],
+	needs: ['marketplaces', 'marketplace', 'application', "multi_factor_authentication"],
 
 	content: null,
 	auth_code_confirm: null,
@@ -82,8 +82,8 @@ Balanced.AccountSecurityController = Balanced.ObjectController.extend(Ember.Even
 		},
 		enableAuth: function(router, evt) {
 			var self = this;
-
-			this.get('auth').enableMultiFactorAuthentication()
+			this.get("controllers.multi_factor_authentication")
+				.enableMultiFactorAuthentication()
 				.then(function() {
 					self.set('status', 'enabling');
 					self.loadQRCode();
@@ -92,7 +92,8 @@ Balanced.AccountSecurityController = Balanced.ObjectController.extend(Ember.Even
 		disableAuth: function(router, evt) {
 			var self = this;
 
-			this.get('auth').disableMultiFactorAuthentication()
+			this.get("controllers.multi_factor_authentication")
+				.disableMultiFactorAuthentication()
 				.then(function() {
 					self.set('status', 'disabled');
 					$('#qrcode').html('');
