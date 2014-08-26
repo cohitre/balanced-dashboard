@@ -35,6 +35,7 @@ Balanced.MarketplaceCreateModalView = Balanced.RegisterFlowBaseModal.extend({
 		this.openNext(Balanced.MarketplaceBankAccountCreateModalView, {
 			marketplace: marketplace
 		});
+		this.get("container").lookup("controller:application").transitionToRoute("marketplace", marketplace);
 		this.alertSuccess('Marketplace created. API key: <span class="sl-sb">%@</span>'.fmt(apiKeySecret));
 	},
 
