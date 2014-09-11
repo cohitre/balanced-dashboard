@@ -83,16 +83,12 @@ module.exports = function(grunt) {
 			},
 			libdev: {
 				src: [
-					'static/javascripts/jquery/jquery.js',
-					'static/javascripts/handlebars/handlebars.runtime.js',
-					'static/javascripts/ember/ember.js',
 					'static/javascripts/shapeshifter/shapeshifter.js',
 					'static/lib/ember-validations.prod.js',
 					'static/javascripts/bootstrap/js/bootstrap-dropdown.js',
 					'static/javascripts/bootstrap/js/bootstrap-modal.js',
 					'static/javascripts/bootstrap/js/bootstrap-tooltip.js',
 					'static/javascripts/bootstrap/js/bootstrap-popover.js',
-					'static/javascripts/lodash/dist/lodash.underscore.js',
 					'static/javascripts/mixpanel/mixpanel.js',
 					'static/javascripts/google-code-prettify/src/prettify.js',
 					'static/javascripts/strftime/index.js',
@@ -101,7 +97,6 @@ module.exports = function(grunt) {
 					'static/javascripts/bootstrap-modal/js/bootstrap-modalmanager.js',
 					'static/javascripts/bootstrap-modal/js/bootstrap-modal.js',
 					'static/javascripts/jquery-csv/src/jquery.csv.js',
-					'static/javascripts/moment/moment.js',
 					'static/lib/moment-business-days.js',
 					'static/lib/daterangepicker.js',
 					'static/javascripts/timepicker/jquery.timepicker.js'
