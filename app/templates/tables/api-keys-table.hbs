@@ -30,7 +30,14 @@
 					{{#if apiKey.secret}}
 						{{api-key-secret-shower key=apiKey}}
 					{{else}}
-						Secret unavailable
+						{{#bootstrap-popover
+							classNames="sl-none"
+							title="Secret unavailable"
+							triggerOn="hover"
+							placement="top"
+							content="You cannot view the key secret for keys created outside of the Balanced Dashboard or created by other users."}}
+							Secret unavailable
+						{{/bootstrap-popover}}
 					{{/if}}
 				</span>
 			</td>

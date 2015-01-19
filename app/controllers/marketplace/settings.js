@@ -34,7 +34,20 @@ var MarketplaceSettingsController = Ember.ObjectController.extend(actionsMixin, 
 		},
 
 		reloadApiKeys: function() {
-			this.get("userMarketplace.marketplaceApiKeys").reload();
+			var self = this;
+			self.set("apiKeysCollection", null);
+			var store = this.get("controllers.marketplace").getStore();
+			store.fetchCollection("api-key", "/api_keys").then(function(apiKeys) {
+				var userApiKeys = self.get("userMarketplace.keys");
+				apiKeys.forEach(function(apiKey) {
+					var href = "/v1" + apiKey.get("href");
+					var userApiKey = userApiKeys.findBy("uri", href);
+					if (userApiKey) {
+						apiKey.set("secret", userApiKey.secret);
+					}
+				});
+				self.set("apiKeysCollection", apiKeys);
+			});
 		},
 
 		reloadUsers: function() {
