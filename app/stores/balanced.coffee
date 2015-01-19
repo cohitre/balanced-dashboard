@@ -5,6 +5,7 @@ BalancedStore = Store.extend(
 		bank_account: "model:bk/bank-account"
 		customer: "model:bk/customer"
 		api_key_production: "model:bk/api-key-production"
+		api_key: "model:bk/api-key"
 		marketplace: "model:bk/marketplace"
 )
 

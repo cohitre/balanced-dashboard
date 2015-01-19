@@ -1,0 +1,50 @@
+<thead>
+	<tr>
+		{{#each column in view.columnHeaders}}
+			<th {{bind-attr class=column.class}}>
+				<span>{{column.label}}</span>
+			</th>
+		{{/each}}
+	</tr>
+</thead>
+{{#if view.isLoadMore}}
+	<tfoot>
+		{{table-load-more
+			isLoadingMore=isLoadingMore
+			colspan=view.columnHeaders.length
+			label="Load more"
+			onButtonClick="loadMore"
+			collection=view.collection}}
+	</tfoot>
+{{/if}}
+<tbody>
+	{{#each apiKey in view.collection}}
+		<tr>
+			{{view "tables/cells/linked-date-cell"
+				item=apiKey
+				date=apiKey.created_at
+			}}
+			{{table-cell-label label=apiKey.name}}
+			<td class="wrap-text">
+				<span class="api-key-secret">
+					{{#if apiKey.secret}}
+						{{api-key-secret-shower key=apiKey}}
+					{{else}}
+						Secret unavailable
+					{{/if}}
+				</span>
+			</td>
+			<td class="span1 delete-container">
+				<a href="#" {{action "delete" apiKey}}>
+					<i class="icon-table-x confirm-delete-key action"></i>
+				</a>
+			</td>
+		</tr>
+	{{else}}
+		{{#if view.isLoading}}
+			{{table-row-empty colspan=view.columnHeaders.length text="Loading..."}}
+		{{else}}
+			{{table-row-empty colspan=view.columnHeaders.length text="No results"}}
+		{{/if}}
+	{{/each}}
+</tbody>

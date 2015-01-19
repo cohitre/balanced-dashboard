@@ -2,7 +2,7 @@
 
 {{#view "detail-views/body-panel"}}
 	{{#view "detail-views/api-model-panel" model=model}}
-		{{view detail-views/description-lists/settings-marketplace-titled-key-values-section model=model}}
+		{{view "detail-views/description-lists/settings-marketplace-titled-key-values-section" model=model}}
 		{{view "detail-views/description-lists/settings-owner-titled-key-values-section" model=model.owner_customer}}
 	{{/view}}
 
@@ -26,6 +26,7 @@
 			</div>
 			<span class="sl-note">(All keys have admin access to the dashboard)</span>
 			<div class="results">
+				{{render "tables/api-keys-table" apiKeysCollection}}
 				{{api-keys-table keys=userMarketplace.fullKeys marketplaceSecret=marketplaceSecret userMarketplace=userMarketplace}}
 			</div>
 		</section>
