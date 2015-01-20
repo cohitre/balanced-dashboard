@@ -22,9 +22,10 @@ var MarketplaceSettingsController = Ember.ObjectController.extend(actionsMixin, 
 
 	userMarketplace: function() {
 		var user = this.get('user');
-		var currentUserMarketplace = user.user_marketplace_for_id(this.get('id'));
-		return currentUserMarketplace;
-	}.property('user', 'id'),
+		return user.get("isLoaded") ?
+			user.user_marketplace_for_id(this.get('id')) :
+			undefined;
+	}.property('user', 'id', "user.isLoaded"),
 
 	marketplaceSecret: Ember.computed.reads("userMarketplace.secret"),
 
@@ -36,18 +37,23 @@ var MarketplaceSettingsController = Ember.ObjectController.extend(actionsMixin, 
 		reloadApiKeys: function() {
 			var self = this;
 			self.set("apiKeysCollection", null);
-			var store = this.get("controllers.marketplace").getStore();
-			store.fetchCollection("api-key", "/api_keys").then(function(apiKeys) {
-				var userApiKeys = self.get("userMarketplace.keys");
-				apiKeys.forEach(function(apiKey) {
-					var href = "/v1" + apiKey.get("href");
-					var userApiKey = userApiKeys.findBy("uri", href);
-					if (userApiKey) {
-						apiKey.set("secret", userApiKey.secret);
-					}
+
+			this.get("user").reload()
+				.then(function() {
+					var store = self.get("controllers.marketplace").getStore();
+					return store.fetchCollection("api-key", "/api_keys");
+				})
+				.then(function(apiKeys) {
+					var userApiKeys = self.get("userMarketplace.keys");
+					apiKeys.forEach(function(apiKey) {
+						var href = "/v1" + apiKey.get("href");
+						var userApiKey = userApiKeys.findBy("uri", href);
+						if (userApiKey) {
+							apiKey.set("secret", userApiKey.secret);
+						}
+					});
+					self.set("apiKeysCollection", apiKeys);
 				});
-				self.set("apiKeysCollection", apiKeys);
-			});
 		},
 
 		reloadUsers: function() {

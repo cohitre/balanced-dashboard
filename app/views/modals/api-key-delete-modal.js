@@ -14,7 +14,8 @@ var ApiKeyDeleteModalView = ModalBaseView.extend({
 			var self = this;
 			var newKey;
 			var secret = key.get('secret');
-			var userMarketplace = self.get("container").lookup("controller:marketplace/settings").get("userMarketplace");
+			var settingsController = self.get("container").lookup("controller:marketplace/settings");
+			var userMarketplace = settingsController.get("userMarketplace");
 
 			if (secret === userMarketplace.get("secret")) {
 				newKey = userMarketplace.get('keys')
@@ -31,7 +32,7 @@ var ApiKeyDeleteModalView = ModalBaseView.extend({
 			self.set("isSaving", true);
 			key.delete()
 				.finally(function() {
-					userMarketplace.get("marketplaceApiKeys").reload();
+					settingsController.send("reloadApiKeys");
 					self.set("isSaving", false);
 					self.close();
 				});

@@ -1,18 +1,11 @@
-`import Ember from "ember";`
+`import BaseTableController from "./base";`
 
-ApiKeysTableController = Ember.Controller.extend(
-	needs: ["marketplace"]
-
-	isLoadingMore: false
-
+ApiKeysTableController = BaseTableController.extend(
 	actions:
-		loadMore: (collection) ->
-			@set "isLoadingMore", true
-			collection.loadNext().finally =>
-				@set "isLoadingMore", false
-
 		delete: (apiKey) ->
-			console.log "Deleting", apiKey
+			@send("openModal", "modals/api-key-delete-modal", apiKey)
+#			apiKey.delete().then =>
+#				@send "reloadApiKeys"
 )
 
 `export default ApiKeysTableController;`

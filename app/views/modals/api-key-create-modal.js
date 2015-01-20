@@ -36,14 +36,13 @@ var ApiKeyCreateModalView = ModalBaseView.extend(Form, {
 	actions: {
 		save: function() {
 			var self = this;
-			var userMarketplace = self.get("container").lookup("controller:marketplace/settings").get("userMarketplace");
+			var settingsController = self.get("container").lookup("controller:marketplace/settings");
 
 			self.set("isSaving", true);
 			self.buildApiKey(self.get('keyName'))
 				.save()
 				.then(function(newKey) {
-					return self.buildUserMarketplace(self.getApiKeysUri(), newKey)
-						.save();
+					return self.buildUserMarketplace(self.getApiKeysUri(), newKey).save();
 				})
 				.then(undefined, function(error) {
 					if (error.error !== "Unauthorized") {
@@ -51,7 +50,7 @@ var ApiKeyCreateModalView = ModalBaseView.extend(Form, {
 					}
 				})
 				.finally(function() {
-					userMarketplace.get("marketplaceApiKeys").reload();
+					settingsController.send("reloadApiKeys");
 					self.set("isSaving", false);
 					self.close();
 				});
