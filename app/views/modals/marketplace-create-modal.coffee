@@ -24,23 +24,12 @@ MarketplaceCreateView = ModalBaseView.extend(Full, Form, Save,
 
 	createMarketplaceApplication: ->
 		mp = @get("marketplace")
-		@trackEvent "Marketplace created", mp.getDebuggingProperties()
 		@trackEvent "Creating marketplace application", mp.getDebuggingProperties()
+		@getNotificationController()
+			.alertSuccess("Your application is submitted. You will receive an confirmation email shortly.", name: "marketplace-application-success")
+		@close()
+		@set("isSaving", false)
 
-		store = @container.lookup("store:balanced")
-		mpApplication = store.build("marketplace-application")
-		mpApplication.ingestUser @getUser()
-		mpApplication.ingestMarketplace @get("model")
-		mpApplication.ingestApiKey @get("apiKey")
-
-		mpApplication.save()
-			.then =>
-				@trackEvent "Gandalf application created", mpApplication.getDebuggingProperties()
-				@close()
-				@getNotificationController()
-					.alertSuccess("Marketplace application created", name: "marketplace-application-success")
-			.finally =>
-				@set("isSaving", false)
 
 	linkMarketplaceToUser: ->
 		mp = @get("marketplace")
@@ -53,7 +42,7 @@ MarketplaceCreateView = ModalBaseView.extend(Full, Form, Save,
 			.addApiKeyToCurrentUserFlow(@get("apiKey.secret"))
 			.then =>
 				@trackEvent "Marketplace linked to user", mp.getDebuggingProperties()
-				@getModalNotificationController().alertSuccess("Marketplace created")
+				@getModalNotificationController().alertSuccess("Your marketplace has been created.", name: "marketplace-creation-success")
 				@close()
 
 	onModelSaved: (model) ->
@@ -64,13 +53,26 @@ MarketplaceCreateView = ModalBaseView.extend(Full, Form, Save,
 
 	model: Ember.computed.reads("marketplace").readOnly()
 
+	getModelToBeSaved: ->
+		mp = @get("marketplace")
+
+		if BalancedApp.USE_MARKETPLACE_APPLICATION
+			store = @container.lookup("store:balanced")
+			mpApplication = store.build("marketplace-application")
+			mpApplication.ingestUser @getUser()
+			mpApplication.ingestMarketplace mp
+			mpApplication.ingestApiKey @get("apiKey")
+			mpApplication
+		else
+			mp
+
 	actions:
 		save: ->
 			mp = @get("marketplace")
 			@getModalNotificationController().clearAlerts()
 			@trackEvent "User creating marketplace", mp.getDebuggingProperties()
 			if @get("isTermsAccepted")
-				@save mp
+				@save @getModelToBeSaved()
 			else
 				@getModalNotificationController()
 					.alertError("Must accept the terms and conditions", name: "terms-accepted")
