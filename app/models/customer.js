@@ -153,6 +153,13 @@ var Customer = Model.extend(Ember.Validations, {
 		return addressParts.join(seperator);
 	}.property('address.line1', 'address.line2', 'address.city', 'address.state', 'address.postal_code', 'address.country_code'),
 
+	formattedDateOfBirth: Ember.computed("dob_month", "dob_year", function() {
+		var month = this.get('dob_month') || "";
+		var year = this.get('dob_year') || "";
+		var pattern = month < 10 ? "0%@ / %@" : "%@ / %@";
+		return pattern.fmt(month, year);
+	}),
+
 	dob: function() {
 		var month = this.get('dob_month');
 		var year = this.get('dob_year');

@@ -64,13 +64,15 @@
 		labelText="Phone number"
 		field="phone"
 	}}
-	{{view "form-fields/month-year-select-form-field"
+
+	{{view "form-fields/month-year-input-form-field"
 		model=view.model
 		monthValue=view.model.dob_month
 		yearValue=view.model.dob_year
 		labelText="Date of birth"
 		name="dob"
 	}}
+
 	{{view "form-fields/text-form-field"
 		model=view.model
 		labelText="Last 4 of SSN"

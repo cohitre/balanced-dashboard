@@ -21,7 +21,7 @@ var CustomerTitledKeyValuesSectionView = TitledKeyValuesSectionView.extend({
 		.add("Postal code", "address.postal_code")
 		.add("Country", "country_name")
 		.add("Phone number", "phone")
-		.add("Date of birth", "dob")
+		.add("Date of birth", "formattedDateOfBirth")
 		.add("SSN", "ssn_last4")
 		.add("Country", "country_name")
 		.add("Facebook ID", "facebook_id", "facebook_url")

@@ -5,7 +5,11 @@ BaseFormFieldView = Ember.View.extend
 	templateName: "form-fields/base-form-field"
 	classNameBindings: [":form-group", "isError:has-error"]
 	inputName: Ember.computed "field", ->
-		@get("field").replace(/\./, "_")
+		value = @get("field")
+		if Ember.isBlank(value)
+			return undefined
+		else
+			return value.replace(/\./, "_")
 
 	value: Ember.computed "model", "field", (a, value) ->
 		model = @get("model")
